@@ -10,6 +10,17 @@ const Mixer: React.FC<Props> = ({ leftRef, rightRef }) => {
   const [leftVol, setLeftVol] = useState(1)
   const [rightVol, setRightVol] = useState(1)
 
+  const [gainL, setGainL] = useState(0)
+  const [gainR, setGainR] = useState(0)
+
+  const [eqLHigh, setEqLHigh] = useState(0)
+  const [eqLMid, setEqLMid] = useState(0)
+  const [eqLLow, setEqLLow] = useState(0)
+
+  const [eqRHigh, setEqRHigh] = useState(0)
+  const [eqRMid, setEqRMid] = useState(0)
+  const [eqRLow, setEqRLow] = useState(0)
+
   useEffect(() => {
     if (leftRef.current) leftRef.current.volume = leftVol * (1 - cross)
   }, [leftRef, leftVol, cross])
@@ -21,9 +32,45 @@ const Mixer: React.FC<Props> = ({ leftRef, rightRef }) => {
   return (
     <div className="border p-2 flex flex-col items-center">
       <h2 className="font-semibold mb-2">Mixer</h2>
-      <div className="flex items-end space-x-4">
-        <div className="flex flex-col items-center">
-          <label className="text-xs mb-1">Ch1</label>
+      <div className="flex space-x-8">
+        {/* Channel 1 */}
+        <div className="flex flex-col items-center space-y-2">
+          <input
+            type="range"
+            min={-12}
+            max={12}
+            step={1}
+            value={gainL}
+            onChange={e => setGainL(parseFloat(e.target.value))}
+            className="gain-fader"
+          />
+          <input
+            type="range"
+            min={-12}
+            max={12}
+            step={1}
+            value={eqLHigh}
+            onChange={e => setEqLHigh(parseFloat(e.target.value))}
+            className="eq-fader"
+          />
+          <input
+            type="range"
+            min={-12}
+            max={12}
+            step={1}
+            value={eqLMid}
+            onChange={e => setEqLMid(parseFloat(e.target.value))}
+            className="eq-fader"
+          />
+          <input
+            type="range"
+            min={-12}
+            max={12}
+            step={1}
+            value={eqLLow}
+            onChange={e => setEqLLow(parseFloat(e.target.value))}
+            className="eq-fader"
+          />
           <input
             type="range"
             min={0}
@@ -31,11 +78,12 @@ const Mixer: React.FC<Props> = ({ leftRef, rightRef }) => {
             step={0.01}
             value={leftVol}
             onChange={e => setLeftVol(parseFloat(e.target.value))}
-            className="h-32 rotate-[-90deg]"
+            className="volume-fader"
           />
+          <button className="cue-button">Cue</button>
         </div>
-        <div className="flex flex-col items-center">
-          <label className="text-xs mb-1">Crossfader</label>
+
+        <div className="flex flex-col justify-end w-32">
           <input
             type="range"
             min={0}
@@ -43,11 +91,48 @@ const Mixer: React.FC<Props> = ({ leftRef, rightRef }) => {
             step={0.01}
             value={cross}
             onChange={e => setCross(parseFloat(e.target.value))}
-            className="w-32"
+            className="crossfader"
           />
         </div>
-        <div className="flex flex-col items-center">
-          <label className="text-xs mb-1">Ch2</label>
+
+        {/* Channel 2 */}
+        <div className="flex flex-col items-center space-y-2">
+          <input
+            type="range"
+            min={-12}
+            max={12}
+            step={1}
+            value={gainR}
+            onChange={e => setGainR(parseFloat(e.target.value))}
+            className="gain-fader"
+          />
+          <input
+            type="range"
+            min={-12}
+            max={12}
+            step={1}
+            value={eqRHigh}
+            onChange={e => setEqRHigh(parseFloat(e.target.value))}
+            className="eq-fader"
+          />
+          <input
+            type="range"
+            min={-12}
+            max={12}
+            step={1}
+            value={eqRMid}
+            onChange={e => setEqRMid(parseFloat(e.target.value))}
+            className="eq-fader"
+          />
+          <input
+            type="range"
+            min={-12}
+            max={12}
+            step={1}
+            value={eqRLow}
+            onChange={e => setEqRLow(parseFloat(e.target.value))}
+            className="eq-fader"
+          />
           <input
             type="range"
             min={0}
@@ -55,8 +140,9 @@ const Mixer: React.FC<Props> = ({ leftRef, rightRef }) => {
             step={0.01}
             value={rightVol}
             onChange={e => setRightVol(parseFloat(e.target.value))}
-            className="h-32 rotate-[-90deg]"
+            className="volume-fader"
           />
+          <button className="cue-button">Cue</button>
         </div>
       </div>
     </div>

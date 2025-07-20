@@ -1,3 +1,67 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .volume-fader,
+  .eq-fader,
+  .gain-fader,
+  .crossfader {
+    appearance: none;
+    border-radius: 0.25rem;
+    position: relative;
+    background-color: #374151; /* gray-700 */
+  }
+
+  .volume-fader::-webkit-slider-thumb,
+  .eq-fader::-webkit-slider-thumb,
+  .gain-fader::-webkit-slider-thumb,
+  .crossfader::-webkit-slider-thumb {
+    appearance: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    background-color: #d1d5db; /* gray-300 */
+    width: 14px;
+    height: 14px;
+  }
+
+  .volume-fader,
+  .eq-fader,
+  .gain-fader {
+    width: 8px;
+    height: 100px;
+    writing-mode: bt-lr;
+    transform: rotate(180deg);
+  }
+
+  .crossfader {
+    height: 10px;
+    width: 100%;
+  }
+
+  .cue-button {
+    background-color: #f97316; /* orange-500 */
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+
+  .jogwheel {
+    position: relative;
+    user-select: none;
+    border-radius: 9999px;
+    background-color: #1f2937; /* gray-800 */
+    width: 160px;
+    height: 160px;
+  }
+
+  .jogwheel .marker {
+    position: absolute;
+    background-color: #ffffff;
+    width: 2px;
+    height: 20px;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+  }
+}
