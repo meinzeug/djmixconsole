@@ -85,6 +85,13 @@ install_vite() {
   fi
 }
 
+# Ensure rsync is available before attempting to copy files
+ensure_rsync() {
+  if ! command -v rsync >/dev/null; then
+    install_pkg rsync
+  fi
+}
+
 remove_installed() {
   apt-get remove -y nginx git nodejs rsync >/dev/null 2>&1 || true
   apt-get autoremove -y
@@ -100,7 +107,6 @@ do_install() {
 
   install_pkg nginx
   install_pkg git
-  install_pkg rsync
   install_pkg certbot
   install_pkg python3-certbot-nginx
 
@@ -108,6 +114,7 @@ do_install() {
   install_vite
 
   mkdir -p "$TARGET_DIR"
+  ensure_rsync
   rsync -a --exclude=".git" "$REPO_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
   npm install
@@ -159,11 +166,11 @@ do_update() {
   apt-get upgrade -y
   install_pkg nginx
   install_pkg git
-  install_pkg rsync
   install_pkg certbot
   install_pkg python3-certbot-nginx
   install_node
   install_vite
+  ensure_rsync
   rsync -a --exclude=".git" "$REPO_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
   npm install
