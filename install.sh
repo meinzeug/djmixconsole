@@ -92,7 +92,9 @@ fi
 TARGET_DIR="/var/www/${DOMAIN}"
 
 install_pkg() {
-  dpkg -s "$1" >/dev/null 2>&1 || apt-get install -y "$1"
+  if ! dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"; then
+    apt-get install -y "$1"
+  fi
 }
 
 install_node() {
