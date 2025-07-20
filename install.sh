@@ -98,6 +98,14 @@ else
     echo "Target directory $TARGET_DIR does not exist." >&2
     exit 1
   fi
+  apt-get update
+  apt-get upgrade -y
+  install_pkg nginx
+  install_pkg git
+  install_pkg certbot
+  install_pkg python3-certbot-nginx
+  install_node
+  install_vite
   rsync -a --exclude=".git" "$REPO_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
   npm install
