@@ -42,8 +42,19 @@ esac
 case "$MODE" in
   install|reinstall)
     read -rp "Enter your domain (e.g., example.com): " DOMAIN
-    read -rp "Enter your email address for Let's Encrypt: " EMAIL
-    read -rp "Enter your name: " NAME
+    CERT_EXIST=no
+    if [ -d "/etc/letsencrypt/live/${DOMAIN}" ]; then
+      read -rp "Use existing certificate for $DOMAIN? (y/n): " CERT_CHOICE
+      CERT_CHOICE=$(echo "$CERT_CHOICE" | tr '[:upper:]' '[:lower:]')
+      case "$CERT_CHOICE" in
+        y|yes|"" ) CERT_EXIST=yes ;;
+        n|no) CERT_EXIST=no ;;
+      esac
+    fi
+    if [ "$CERT_EXIST" = "no" ]; then
+      read -rp "Enter your email address for Let's Encrypt: " EMAIL
+      read -rp "Enter your name: " NAME
+    fi
     ;;
   update|deinstall)
     read -rp "Enter your domain (e.g., example.com): " DOMAIN
@@ -138,23 +149,17 @@ NGINX
 
   systemctl reload nginx
 
-  CERT_EXIST=no
-  if [ -d "/etc/letsencrypt/live/${DOMAIN}" ]; then
-    read -rp "Use existing certificate? (y/n): " CERT_CHOICE
-    CERT_CHOICE=$(echo "$CERT_CHOICE" | tr '[:upper:]' '[:lower:]')
-    case "$CERT_CHOICE" in
-      y|yes|"" ) CERT_EXIST=yes ;;
-      n|no) CERT_EXIST=no ;;
-    esac
-  fi
-
   if [ "$CERT_EXIST" = "no" ]; then
     certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN" \
       --non-interactive --agree-tos -m "$EMAIL" --redirect
   fi
 
   systemctl reload nginx
-  echo "Installation complete, $NAME. Visit https://$DOMAIN"
+  if [ -n "$NAME" ]; then
+    echo "Installation complete, $NAME. Visit https://$DOMAIN"
+  else
+    echo "Installation complete. Visit https://$DOMAIN"
+  fi
 }
 
 do_update() {
