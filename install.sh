@@ -16,6 +16,7 @@ APT_PACKAGES=(
   certbot
   python3-certbot-nginx
   rsync
+  curl
 )
 GLOBAL_NPM_PACKAGES=(vite)
 
@@ -73,12 +74,12 @@ case "$MODE" in
     ;;
 esac
 
-REPO_URL="https://github.com/meinzeug/djmixconsole.git"
+REPO_URL="https://github.com/meinzeug/djmixconsole2.git"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-if [ -d "$SCRIPT_DIR/.git" ] || [ -f "$SCRIPT_DIR/package.json" ]; then
+if [ -d "$SCRIPT_DIR/.git" ] || [ -f "$SCRIPT_DIR/app/package.json" ]; then
   REPO_DIR="$SCRIPT_DIR"
 else
-  REPO_DIR="/tmp/djmixconsole"
+  REPO_DIR="/tmp/djmixconsole2"
   if ! command -v git >/dev/null; then
     apt-get update
     apt-get install -y git
@@ -90,6 +91,7 @@ else
   fi
 fi
 TARGET_DIR="/var/www/${DOMAIN}"
+APP_SOURCE_DIR="${REPO_DIR}/app"
 
 install_pkg() {
   if ! dpkg-query -W -f='${Status}' "$1" 2>/dev/null | grep -q "install ok installed"; then
@@ -159,7 +161,7 @@ do_install() {
   install_dependencies
   mkdir -p "$TARGET_DIR"
   ensure_rsync
-  rsync -a --exclude=".git" "$REPO_DIR/" "$TARGET_DIR/"
+  rsync -a --exclude=".git" "$APP_SOURCE_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
   npm install
   npm update
@@ -209,7 +211,7 @@ do_update() {
   apt-get upgrade -y
   install_dependencies
   ensure_rsync
-  rsync -a --exclude=".git" "$REPO_DIR/" "$TARGET_DIR/"
+  rsync -a --exclude=".git" "$APP_SOURCE_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
   npm install
   npm update
