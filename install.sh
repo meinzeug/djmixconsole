@@ -117,6 +117,22 @@ ensure_rsync() {
   fi
 }
 
+# Open firewall ports for HTTP and HTTPS access if possible
+open_ports() {
+  if command -v ufw >/dev/null 2>&1; then
+    ufw allow 80 >/dev/null 2>&1 || true
+    ufw allow 443 >/dev/null 2>&1 || true
+    ufw reload >/dev/null 2>&1 || true
+  elif command -v iptables >/dev/null 2>&1; then
+    iptables -C INPUT -p tcp --dport 80 -j ACCEPT 2>/dev/null || \
+      iptables -I INPUT -p tcp --dport 80 -j ACCEPT
+    iptables -C INPUT -p tcp --dport 443 -j ACCEPT 2>/dev/null || \
+      iptables -I INPUT -p tcp --dport 443 -j ACCEPT
+  else
+    echo "Warning: No firewall tool found to open ports 80/443" >&2
+  fi
+}
+
 install_dependencies() {
   for pkg in "${APT_PACKAGES[@]}"; do
     install_pkg "$pkg"
@@ -163,6 +179,7 @@ NGINX
   rm -f /etc/nginx/sites-enabled/default
 
   systemctl reload nginx
+  open_ports
 
   if [ "$CERT_EXIST" = "no" ]; then
     certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN" \
