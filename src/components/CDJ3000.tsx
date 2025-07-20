@@ -3,12 +3,18 @@ import React, { useRef, useState } from 'react';
 interface Props {
   files: File[];
   name: string;
+  /**
+   * Optional ref to expose the underlying audio element.
+   * Allows the mixer component to control volume/crossfader.
+   */
+  audioRef?: React.RefObject<HTMLAudioElement>;
 }
 
 // Simple placeholder implementation of a Pioneer CDJ-3000 deck.
 // Offers basic audio playback functionality for now.
-const CDJ3000: React.FC<Props> = ({ files, name }) => {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+const CDJ3000: React.FC<Props> = ({ files, name, audioRef }) => {
+  const internalRef = useRef<HTMLAudioElement | null>(null);
+  const ref = audioRef ?? internalRef;
   const [selected, setSelected] = useState<string>('');
 
   const loadTrack = (file: File) => {
@@ -17,17 +23,17 @@ const CDJ3000: React.FC<Props> = ({ files, name }) => {
   };
 
   const play = () => {
-    audioRef.current?.play();
+    ref.current?.play();
   };
 
   const pause = () => {
-    audioRef.current?.pause();
+    ref.current?.pause();
   };
 
   return (
     <div className="border p-2">
       <h2 className="font-semibold mb-2">{name} – CDJ‑3000</h2>
-      <audio ref={audioRef} src={selected} controls className="w-full" />
+      <audio ref={ref} src={selected} controls className="w-full" />
       <div className="mt-2 space-x-2">
         {files.map((file) => (
           <button
