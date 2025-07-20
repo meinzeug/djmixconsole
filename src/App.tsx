@@ -18,7 +18,7 @@ const App: React.FC = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">DJ Mix Console (Prototype)</h1>
+      <h1 className="text-xl font-bold mb-4">DJ Mix Console</h1>
       <input type="file" accept="audio/*" multiple onChange={onFileChange} />
       <div className="grid grid-cols-2 gap-4 mt-4">
         <div>
