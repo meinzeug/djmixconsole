@@ -50,7 +50,22 @@ case "$MODE" in
     ;;
 esac
 
-REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_URL="https://github.com/meinzeug/djmixconsole.git"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+if [ -d "$SCRIPT_DIR/.git" ] || [ -f "$SCRIPT_DIR/package.json" ]; then
+  REPO_DIR="$SCRIPT_DIR"
+else
+  REPO_DIR="/tmp/djmixconsole"
+  if ! command -v git >/dev/null; then
+    apt-get update
+    apt-get install -y git
+  fi
+  if [ -d "$REPO_DIR/.git" ]; then
+    git -C "$REPO_DIR" pull --ff-only
+  else
+    git clone --depth 1 "$REPO_URL" "$REPO_DIR"
+  fi
+fi
 TARGET_DIR="/var/www/${DOMAIN}"
 
 install_pkg() {
@@ -71,7 +86,7 @@ install_vite() {
 }
 
 remove_installed() {
-  apt-get remove -y nginx git nodejs >/dev/null 2>&1 || true
+  apt-get remove -y nginx git nodejs rsync >/dev/null 2>&1 || true
   apt-get autoremove -y
   rm -rf "$TARGET_DIR"
   rm -f "/etc/nginx/sites-enabled/${DOMAIN}"
@@ -85,6 +100,7 @@ do_install() {
 
   install_pkg nginx
   install_pkg git
+  install_pkg rsync
   install_pkg certbot
   install_pkg python3-certbot-nginx
 
@@ -143,6 +159,7 @@ do_update() {
   apt-get upgrade -y
   install_pkg nginx
   install_pkg git
+  install_pkg rsync
   install_pkg certbot
   install_pkg python3-certbot-nginx
   install_node
