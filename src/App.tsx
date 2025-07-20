@@ -21,9 +21,9 @@ const App: React.FC = () => {
       <h1 className="text-xl font-bold mb-4">DJ Mix Console</h1>
       <input type="file" accept="audio/*" multiple onChange={onFileChange} className="mb-4" />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 items-start">
-        <DeckWrapper initialType="cdj" files={files} name="Left Deck" audioRef={leftRef} />
+        <DeckWrapper initialType="cdj" files={files} name="Left Deck" color="cyan" audioRef={leftRef} />
         <Mixer leftRef={leftRef} rightRef={rightRef} />
-        <DeckWrapper initialType="cdj" files={files} name="Right Deck" audioRef={rightRef} />
+        <DeckWrapper initialType="cdj" files={files} name="Right Deck" color="red" audioRef={rightRef} />
       </div>
     </div>
   );
