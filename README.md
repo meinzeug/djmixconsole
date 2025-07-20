@@ -17,6 +17,7 @@ Beim Start der App öffnet sich ein Dateiauswahl-Dialog, mit dem der Nutzer **lo
 Diese Tracks werden in eine persönliche **Musikkollektion im Speicher (localStorage)** geladen.  
 Von dort aus kann der User sie in die beiden virtuellen Decks (Player 1/2) laden und frei mixen.  
 Dateiverwaltung erfolgt ausschließlich im Browser – kein Upload oder Serverkontakt.
+Jedes Deck kann zwischen CDJ‑3000 und SL‑1200 umgeschaltet werden; die Auswahl wird im localStorage gespeichert.
 
 ---
 
