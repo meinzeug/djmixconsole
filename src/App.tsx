@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import CDJ3000 from './components/CDJ3000';
 import SL1200 from './components/SL1200';
+import DeckSelect from './components/DeckSelect';
 import './style.css';
 
 const App: React.FC = () => {
@@ -22,14 +23,11 @@ const App: React.FC = () => {
       <input type="file" accept="audio/*" multiple onChange={onFileChange} />
       <div className="grid grid-cols-2 gap-4 mt-4">
         <div>
-          <select
+          <DeckSelect
             value={leftType}
-            onChange={(e) => setLeftType(e.target.value as 'cdj' | 'sl1200')}
-            className="mb-2 border"
-          >
-            <option value="cdj">CDJ‑3000</option>
-            <option value="sl1200">SL‑1200</option>
-          </select>
+            onChange={(val) => setLeftType(val)}
+            label="Left Deck"
+          />
           {leftType === 'cdj' ? (
             <CDJ3000 files={files} name="Left Deck" />
           ) : (
@@ -37,14 +35,11 @@ const App: React.FC = () => {
           )}
         </div>
         <div>
-          <select
+          <DeckSelect
             value={rightType}
-            onChange={(e) => setRightType(e.target.value as 'cdj' | 'sl1200')}
-            className="mb-2 border"
-          >
-            <option value="cdj">CDJ‑3000</option>
-            <option value="sl1200">SL‑1200</option>
-          </select>
+            onChange={(val) => setRightType(val)}
+            label="Right Deck"
+          />
           {rightType === 'cdj' ? (
             <CDJ3000 files={files} name="Right Deck" />
           ) : (
