@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# This script sets up nginx with Let's Encrypt and deploys the djmixconsole.
-# It supports an install mode for fresh setup and an update mode for pulling
-# the latest git repository and rebuilding the site. Required packages are
-# only installed if missing.
+# This script manages the deployment of the djmixconsole.
+# It can install, update, deinstall or reinstall the application and its
+# dependencies. Existing Let's Encrypt certificates are kept during
+# deinstallation so that they can be reused on the next installation.
 
 set -e
 
@@ -12,21 +12,41 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-read -rp "Choose mode (install/update): " MODE
+echo "Select mode:"
+echo "  (i)nstall"
+echo "  (u)pdate"
+echo "  (d)einstall"
+echo "  (r)einstall"
+read -rp "Choice: " MODE
 MODE=$(echo "$MODE" | tr '[:upper:]' '[:lower:]')
 
 case "$MODE" in
-  install)
-    read -rp "Enter your domain (e.g., example.com): " DOMAIN
-    read -rp "Enter your email address for Let's Encrypt: " EMAIL
-    read -rp "Enter your name: " NAME
+  i|install)
+    MODE="install"
     ;;
-  update)
-    read -rp "Enter your domain (e.g., example.com): " DOMAIN
+  u|update)
+    MODE="update"
+    ;;
+  d|deinstall)
+    MODE="deinstall"
+    ;;
+  r|reinstall)
+    MODE="reinstall"
     ;;
   *)
     echo "Invalid mode" >&2
     exit 1
+    ;;
+esac
+
+case "$MODE" in
+  install|reinstall)
+    read -rp "Enter your domain (e.g., example.com): " DOMAIN
+    read -rp "Enter your email address for Let's Encrypt: " EMAIL
+    read -rp "Enter your name: " NAME
+    ;;
+  update|deinstall)
+    read -rp "Enter your domain (e.g., example.com): " DOMAIN
     ;;
 esac
 
@@ -50,7 +70,16 @@ install_vite() {
   fi
 }
 
-if [ "$MODE" = "install" ]; then
+remove_installed() {
+  apt-get remove -y nginx git nodejs >/dev/null 2>&1 || true
+  apt-get autoremove -y
+  rm -rf "$TARGET_DIR"
+  rm -f "/etc/nginx/sites-enabled/${DOMAIN}"
+  rm -f "/etc/nginx/sites-available/${DOMAIN}"
+  systemctl reload nginx || true
+}
+
+do_install() {
   apt-get update
   apt-get upgrade -y
 
@@ -86,14 +115,26 @@ NGINX
 
   systemctl reload nginx
 
-  if [ ! -d "/etc/letsencrypt/live/${DOMAIN}" ]; then
+  CERT_EXIST=no
+  if [ -d "/etc/letsencrypt/live/${DOMAIN}" ]; then
+    read -rp "Use existing certificate? (y/n): " CERT_CHOICE
+    CERT_CHOICE=$(echo "$CERT_CHOICE" | tr '[:upper:]' '[:lower:]')
+    case "$CERT_CHOICE" in
+      y|yes|"" ) CERT_EXIST=yes ;;
+      n|no) CERT_EXIST=no ;;
+    esac
+  fi
+
+  if [ "$CERT_EXIST" = "no" ]; then
     certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN" \
       --non-interactive --agree-tos -m "$EMAIL" --redirect
   fi
 
   systemctl reload nginx
   echo "Installation complete, $NAME. Visit https://$DOMAIN"
-else
+}
+
+do_update() {
   if [ ! -d "$TARGET_DIR" ]; then
     echo "Target directory $TARGET_DIR does not exist." >&2
     exit 1
@@ -112,4 +153,26 @@ else
   npm run build
   systemctl reload nginx
   echo "Update complete for $DOMAIN"
-fi
+}
+
+do_deinstall() {
+  remove_installed
+  echo "Deinstallation complete for $DOMAIN"
+}
+
+case "$MODE" in
+  install)
+    do_install
+    ;;
+  update)
+    do_update
+    ;;
+  deinstall)
+    do_deinstall
+    ;;
+  reinstall)
+    remove_installed
+    do_install
+    ;;
+esac
+
