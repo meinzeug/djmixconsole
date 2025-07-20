@@ -162,6 +162,7 @@ do_install() {
   rsync -a --exclude=".git" "$REPO_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
   npm install
+  npm update
   npm run build
 
   NGINX_CONF="/etc/nginx/sites-available/${DOMAIN}"
@@ -211,6 +212,7 @@ do_update() {
   rsync -a --exclude=".git" "$REPO_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
   npm install
+  npm update
   npm run build
   systemctl reload nginx
   echo "Update complete for $DOMAIN"

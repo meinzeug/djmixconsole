@@ -9,11 +9,12 @@ interface DeckWrapperProps {
   initialType: DeckType;
   files: File[];
   name: string;
+  color: string;
   /** Ref to access the deck's audio element */
   audioRef: React.RefObject<HTMLAudioElement>;
 }
 
-const DeckWrapper: React.FC<DeckWrapperProps> = ({ initialType, files, name, audioRef }) => {
+const DeckWrapper: React.FC<DeckWrapperProps> = ({ initialType, files, name, color, audioRef }) => {
   const [type, setType] = React.useState<DeckType>(() => {
     const saved = localStorage.getItem(`${name}-deck-type`);
     return (saved as DeckType) || initialType;
@@ -27,7 +28,7 @@ const DeckWrapper: React.FC<DeckWrapperProps> = ({ initialType, files, name, aud
     <div>
       <DeckSelect value={type} onChange={setType} label={name} />
       {type === 'cdj' ? (
-        <CDJ3000 files={files} name={name} audioRef={audioRef} />
+        <CDJ3000 files={files} name={name} color={color} audioRef={audioRef} />
       ) : (
         <SL1200 files={files} name={name} audioRef={audioRef} />
       )}

@@ -58,6 +58,10 @@
     background-color: #fb923c;
   }
 
+  .hotcue-button {
+    @apply py-3 rounded text-sm font-bold transition-all duration-200;
+  }
+
   .play-button {
     @apply bg-green-600 hover:bg-green-500 text-white rounded-full px-4 py-2 shadow-lg;
   }
@@ -74,6 +78,19 @@
     height: 160px;
     background: radial-gradient(circle at center, #4b5563 0%, #1f2937 70%);
     transition: transform 0.1s linear;
+  }
+
+  @keyframes jogspin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .jogwheel.playing {
+    animation: jogspin 3s linear infinite;
   }
 
   .jogwheel .marker {
