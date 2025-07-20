@@ -1,90 +1,75 @@
-# 🎧 Browserbasierte DJ Mix App – CDJ-3000 & DJM-A9 Nachbildung (ohne KI, ohne Anhang)
+# DJ Mix Console
 
-## 🚀 Installation auf Ubuntu
-Führe im Terminal den folgenden Befehl aus, um die Anwendung und alle Abhängigkeiten zu installieren:
+## Deutsch
+
+### 🚨 Ziel
+Erstelle eine vollständig clientseitige React-App (TypeScript), die zwei Pioneer **CDJ‑3000** Player und einen **DJM‑A9** Mixer funktional und visuell nachbildet. Die Anwendung läuft komplett im Browser – ohne Backend, ohne KI und ohne API-Schlüssel.
+
+### 📦 Installation auf Ubuntu Server
+Führe auf deinem Server folgenden Befehl aus:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/meinzeug/djmixconsole/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/meinzeug/djmixconsole2/main/install.sh)
 ```
 
-## 🛠️ Ziel
-Erstelle eine vollständig clientseitige React-App (TypeScript), die zwei Pioneer **CDJ‑3000** Player und einen **DJM‑A9** Mixer funktional und visuell nachbildet. Die Anwendung soll **offlinefähig im Browser laufen** – ohne Backend, ohne KI, ohne API-Schlüssel.
+Das Skript fragt nach deiner Domain und installiert anschließend:
+
+- **Nginx** als Webserver
+- **Node.js 22** mit dem Paketmanager **npm**
+- **Git** zum Klonen des Repository
+- **Certbot** samt `python3-certbot-nginx` für ein automatisches Let's Encrypt Zertifikat
+- **rsync** und **curl**
+- das globale npm-Paket **vite**
+
+Danach wird der Quellcode geladen, gebaut und unter `/var/www/<domain>` abgelegt. Nginx wird für deine Domain konfiguriert, inklusive HTTPS via Let's Encrypt.
+
+### 🎟 Features
+- MP3-Import direkt beim Start – lokale Dateien bleiben lokal
+- Zwei virtuelle **CDJ‑3000** oder wahlweise **SL‑1200** Player
+- Vollwertiger **DJM‑A9** Mixer mit 4 Kanälen und Beat FX
+- Jogwheel-Steuerung, Hot Cues, Loops, Beat/Key Sync
+- Tastatursteuerung für alle wichtigen Funktionen
+- Offline nutzbar, alle Daten im Browser gespeichert
+
+### 📢 Entwicklung
+1. `npm ci`
+2. `npm run dev`
+3. Achte darauf, dass optionale Abhängigkeiten wie `zustand` und `immer` installiert sind.
 
 ---
 
-## 📂 MP3-Import beim App-Start
-Beim Start der App öffnet sich ein Dateiauswahl-Dialog, mit dem der Nutzer **lokale MP3-Dateien** von seinem Gerät auswählt.  
-Diese Tracks werden in eine persönliche **Musikkollektion im Speicher (localStorage)** geladen.  
-Von dort aus kann der User sie in die beiden virtuellen Decks (Player 1/2) laden und frei mixen.  
-Dateiverwaltung erfolgt ausschließlich im Browser – kein Upload oder Serverkontakt.
-Jedes Deck kann zwischen CDJ‑3000 und SL‑1200 umgeschaltet werden; die Auswahl wird im localStorage gespeichert.
+## English
 
----
+### 🚀 Goal
+This project recreates two Pioneer **CDJ‑3000** players and a **DJM‑A9** mixer entirely in the browser using React and TypeScript. No backend, no AI, no API keys.
 
-## 🎚️ CDJ-3000 Funktionen (pro Player)
+### 🛠 Install on Ubuntu Server
+Run the command below on your server:
 
-### 🔹 Oberfläche:
-- 9″ Touchscreen mit Wellenformanzeige, Track-Info, Hot Cues, Loops, Timecode
-- Jogwheel (beleuchtet, mit Track-Cover, Slip, Vinyl-Modus)
-- 8 Hot Cue Buttons (RGB), CUE/PLAY Buttons
-- Loop In/Out, Auto Loop, Loop Exit, Beat Jump ±
-- Slip Mode, Reverse
-- Tempo-Fader (mit ±6/10/16/WIDE), Key Sync, Master Tempo
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/meinzeug/djmixconsole2/main/install.sh)
+```
 
-### 🔹 Hauptfunktionen:
-- MP3/WAV/FLAC-Audio über FileReader API laden
-- Track-Scrubbing per Touch oder Tastatur
-- Hot Cue setzen, löschen, triggern
-- Loop setzen, editieren, verlassen
-- Beat Sync & Key Sync
-- Visualisierung: Waveform (z. B. wavesurfer.js), Cue- & Loop-Overlays
-- Touch- oder Tastatursteuerung (CapsLock-Modus)
+The script will ask for your domain and then install:
 
----
+- **Nginx** web server
+- **Node.js 22** and **npm**
+- **Git** for cloning the repository
+- **Certbot** with `python3-certbot-nginx` to obtain a Let's Encrypt certificate
+- **rsync** and **curl**
+- global npm package **vite**
 
-## 🎛️ DJM-A9 Mixer
+Afterwards the source is copied to `/var/www/<domain>`, built and served via Nginx. HTTPS is automatically configured for your domain.
 
-### 🔹 Oberfläche:
-- 4 Kanäle mit: Gain, 3-Band EQ (HI/MID/LOW), Color FX, Kanal-Fader
-- Crossfader mit A/B-Zuweisung + 3 Curve-Modi
-- 14 Beat FX (Reverb, Delay, Mobius, Spiral, Echo usw.)
-- X-Pad Steuerung (Wet/Dry)
-- Mic: 2 Eingänge mit EQ, Push-To-Talk, Talkover
-- Booth Out & Master Out Pegelanzeige
-- Kopfhörer-Monitoring mit CUE A/B, Mono Split, Mix-Regler
+### 🎟 Features
+- Import local MP3s when the app starts – files never leave your browser
+- Two virtual **CDJ‑3000** (or **SL‑1200**) players
+- Full **DJM‑A9** mixer with four channels and Beat FX
+- Jog wheel control, hot cues, loops, beat/key sync
+- Keyboard shortcuts for every important action
+- Works offline with all data stored in the browser
 
-### 🔹 Hauptfunktionen:
-- Audio-Routing: 2 CDJs auf CH1/CH2 → Master Out
-- FX-Routing auf Kanäle und/oder Master
-- Pegelanzeigen, EQ-Isolator-Modi, Center-Lock für Color FX
-- Mic-Handling mit Reverb/Echo + Volume/Talkover
-- Booth Out mit eigenem EQ
-
----
-
-## 🎹 Tastatursteuerung (CapsLock aktiviert)
-- Player 1: Q–I für Hot Cues, A–F für Loops, ←/→ Jog, SPACE = Play
-- Player 2: U–L für Hot Cues, V–M für Loops, ,/. Jog, ENTER = Play
-- Mixer: 1–4 = Kanalwahl, ↑/↓ Gain, R/F/V = EQ, TAB = Crossfader, M = Mic Push
-
----
-
-## 📦 Technisches Setup
-- React (TypeScript)
-- Tailwind CSS
-- Zustand oder Context API
-- Web Audio API (FX, Volume, Routing)
-- Canvas oder SVG für visuelle Bedienelemente
-- Speicherung: localStorage (temporäre Kollektion), keine Datenbank
-
----
-
-✅ Ziel: Eine portable, realitätsgetreue DJ-Demo-App, die sich komplett im Browser bedienen lässt – ohne Cloud, ohne Server, ohne KI. Nur du, deine Tracks und zwei virtuelle High-End-Player.
-
-## Development
-1. npm ci
-2. npm run dev
-3. Falls die Build-Phase auf "immer" Bezug nimmt, stelle sicher, dass sowohl
-   `zustand` als auch `immer` installiert sind (bereits in `package.json`
-   hinterlegt).
-
+### 📝 Development
+1. `npm ci`
+2. `npm run dev`
+3. Ensure optional dependencies like `zustand` and `immer` are installed.
