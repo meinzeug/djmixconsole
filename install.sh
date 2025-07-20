@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script sets up nginx with Let's Encrypt and deploys the djmixconsole
-# on a fresh Ubuntu server for the domain meinzeug.cloud.
+# on a fresh Ubuntu server. It prompts for your domain, email and name.
 
 set -e
 
@@ -10,8 +10,9 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-DOMAIN="meinzeug.cloud"
-EMAIL="admin@meinzeug.cloud"
+read -rp "Enter your domain (e.g., example.com): " DOMAIN
+read -rp "Enter your email address for Let's Encrypt: " EMAIL
+read -rp "Enter your name: " NAME
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 TARGET_DIR="/var/www/djmixconsole"
 
@@ -46,4 +47,4 @@ certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN" \
 
 systemctl reload nginx
 
-echo "Installation complete. Visit https://$DOMAIN"
+echo "Installation complete, $NAME. Visit https://$DOMAIN"
