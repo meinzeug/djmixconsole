@@ -120,10 +120,9 @@ do_install() {
   install_pkg git
   install_pkg certbot
   install_pkg python3-certbot-nginx
-
+  install_pkg rsync
   install_node
   install_vite
-
   mkdir -p "$TARGET_DIR"
   ensure_rsync
   rsync -a --exclude=".git" "$REPO_DIR/" "$TARGET_DIR/"
@@ -173,6 +172,7 @@ do_update() {
   install_pkg git
   install_pkg certbot
   install_pkg python3-certbot-nginx
+  install_pkg rsync
   install_node
   install_vite
   ensure_rsync
