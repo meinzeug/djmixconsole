@@ -84,4 +84,7 @@ Jedes Deck kann zwischen CDJ‑3000 und SL‑1200 umgeschaltet werden; die Auswa
 ## Development
 1. npm install
 2. npm run dev
+3. Falls die Build-Phase auf "immer" Bezug nimmt, stelle sicher, dass sowohl
+   `zustand` als auch `immer` installiert sind (bereits in `package.json`
+   hinterlegt).
 
