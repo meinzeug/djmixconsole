@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Knob from './Knob'
 
 interface Props {
   leftRef: React.RefObject<HTMLAudioElement>
@@ -35,42 +36,10 @@ const Mixer: React.FC<Props> = ({ leftRef, rightRef }) => {
       <div className="flex space-x-8">
         {/* Channel 1 */}
         <div className="flex flex-col items-center space-y-2">
-          <input
-            type="range"
-            min={-12}
-            max={12}
-            step={1}
-            value={gainL}
-            onChange={e => setGainL(parseFloat(e.target.value))}
-            className="gain-fader"
-          />
-          <input
-            type="range"
-            min={-12}
-            max={12}
-            step={1}
-            value={eqLHigh}
-            onChange={e => setEqLHigh(parseFloat(e.target.value))}
-            className="eq-fader"
-          />
-          <input
-            type="range"
-            min={-12}
-            max={12}
-            step={1}
-            value={eqLMid}
-            onChange={e => setEqLMid(parseFloat(e.target.value))}
-            className="eq-fader"
-          />
-          <input
-            type="range"
-            min={-12}
-            max={12}
-            step={1}
-            value={eqLLow}
-            onChange={e => setEqLLow(parseFloat(e.target.value))}
-            className="eq-fader"
-          />
+          <Knob value={gainL} onChange={setGainL} />
+          <Knob value={eqLHigh} onChange={setEqLHigh} />
+          <Knob value={eqLMid} onChange={setEqLMid} />
+          <Knob value={eqLLow} onChange={setEqLLow} />
           <input
             type="range"
             min={0}
@@ -97,42 +66,10 @@ const Mixer: React.FC<Props> = ({ leftRef, rightRef }) => {
 
         {/* Channel 2 */}
         <div className="flex flex-col items-center space-y-2">
-          <input
-            type="range"
-            min={-12}
-            max={12}
-            step={1}
-            value={gainR}
-            onChange={e => setGainR(parseFloat(e.target.value))}
-            className="gain-fader"
-          />
-          <input
-            type="range"
-            min={-12}
-            max={12}
-            step={1}
-            value={eqRHigh}
-            onChange={e => setEqRHigh(parseFloat(e.target.value))}
-            className="eq-fader"
-          />
-          <input
-            type="range"
-            min={-12}
-            max={12}
-            step={1}
-            value={eqRMid}
-            onChange={e => setEqRMid(parseFloat(e.target.value))}
-            className="eq-fader"
-          />
-          <input
-            type="range"
-            min={-12}
-            max={12}
-            step={1}
-            value={eqRLow}
-            onChange={e => setEqRLow(parseFloat(e.target.value))}
-            className="eq-fader"
-          />
+          <Knob value={gainR} onChange={setGainR} />
+          <Knob value={eqRHigh} onChange={setEqRHigh} />
+          <Knob value={eqRMid} onChange={setEqRMid} />
+          <Knob value={eqRLow} onChange={setEqRLow} />
           <input
             type="range"
             min={0}

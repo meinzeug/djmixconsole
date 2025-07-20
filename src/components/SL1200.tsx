@@ -57,26 +57,26 @@ const SL1200: React.FC<Props> = ({ files, name, audioRef }) => {
   };
 
   return (
-    <div className="border p-2">
+    <div className="border p-2 bg-gray-800 rounded-lg text-white">
       <h2 className="font-semibold mb-2">{name} – Technics SL‑1200</h2>
-      <audio ref={ref} src={selected} />
+      <audio ref={ref} src={selected} className="mb-2" />
       <div className="mt-2 space-x-2">
         {files.map((file) => (
           <button
             key={file.name}
             onClick={() => loadTrack(file)}
-            className="border px-2 py-1"
+            className="border px-2 py-1 rounded bg-gray-700 hover:bg-gray-600"
           >
             {file.name}
           </button>
         ))}
       </div>
       <div className="mt-4 space-x-2">
-        <button onClick={startStop} className="bg-green-500 text-white px-2 py-1">
+        <button onClick={startStop} className="play-button">
           {isRunning ? 'Stop' : 'Start'}
         </button>
-        <button onClick={resetPitch} className="border px-2 py-1">RESET</button>
-        <button onClick={toggleRange} className="border px-2 py-1">
+        <button onClick={resetPitch} className="pause-button">RESET</button>
+        <button onClick={toggleRange} className="border px-2 py-1 rounded bg-gray-700 hover:bg-gray-600">
           Range {pitchRange === 0.08 ? '±8%' : '±16%'}
         </button>
       </div>

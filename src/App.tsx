@@ -17,10 +17,10 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-gray-900 min-h-screen text-white font-mono">
       <h1 className="text-xl font-bold mb-4">DJ Mix Console</h1>
-      <input type="file" accept="audio/*" multiple onChange={onFileChange} />
-      <div className="grid grid-cols-3 gap-4 mt-4 items-start">
+      <input type="file" accept="audio/*" multiple onChange={onFileChange} className="mb-4" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 items-start">
         <DeckWrapper initialType="cdj" files={files} name="Left Deck" audioRef={leftRef} />
         <Mixer leftRef={leftRef} rightRef={rightRef} />
         <DeckWrapper initialType="cdj" files={files} name="Right Deck" audioRef={rightRef} />
