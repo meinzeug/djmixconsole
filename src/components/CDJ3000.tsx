@@ -25,7 +25,7 @@ const CDJ3000: React.FC<Props> = ({ files, name, audioRef, color }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [trackInfo, setTrackInfo] = useState<{title: string; duration: number; bpm?: number} | null>(null);
-  const deckColors: Record<string, string> = { cyan: '#06b6d4', red: '#ef4444' };
+  const deckColors: Record<string, string> = { cyan: '#06b6d4', rose: '#f43f5e' };
 
   const formatTime = (sec: number) => {
     if (!sec || isNaN(sec)) return '0:00';
@@ -86,8 +86,11 @@ const CDJ3000: React.FC<Props> = ({ files, name, audioRef, color }) => {
   }, [selected]);
 
   return (
-    <div className={`border p-2 bg-gray-800 rounded-lg text-white shadow-${color}-500/40`}>
-      <h2 className="font-semibold mb-2">{name} – CDJ‑3000</h2>
+    <div
+      className="glass-panel text-center"
+      style={{ boxShadow: `0 0 15px ${deckColors[color]}` }}
+    >
+      <h2 className="font-semibold mb-2 text-lg">{name} – CDJ‑3000</h2>
       {trackInfo && (
         <div className="text-sm mb-1 flex justify-between">
           <span>{trackInfo.title}</span>
@@ -96,23 +99,26 @@ const CDJ3000: React.FC<Props> = ({ files, name, audioRef, color }) => {
           </span>
         </div>
       )}
-      <audio ref={ref} src={selected} controls className="w-full mb-2" />
+      <audio ref={ref} src={selected} className="hidden" />
       {selected && (
         <Touchscreen src={selected} audioRef={ref} color={deckColors[color]} />
       )}
-      <div className="h-2 bg-gray-700 rounded mt-2">
+      <div className="h-2 bg-gray-700/50 rounded mt-2">
         <div
           className="h-2"
           style={{ width: `${(progress * 100).toFixed(1)}%`, backgroundColor: deckColors[color] }}
         ></div>
       </div>
       <div
-        className={`jogwheel mx-auto my-4 shadow-${color}-500/40 ${isPlaying ? 'playing' : ''}`}
+        className={`jogwheel mx-auto my-4 ${isPlaying ? 'playing' : ''}`}
         onMouseDown={() => setDragging(true)}
         onMouseUp={() => setDragging(false)}
         onMouseLeave={() => setDragging(false)}
         onMouseMove={onMouseMove}
-        style={!isPlaying ? { transform: `rotate(${rotation}deg)` } : undefined}
+        style={{
+          ...(isPlaying ? {} : { transform: `rotate(${rotation}deg)` }),
+          boxShadow: `0 0 10px ${deckColors[color]}`,
+        }}
       >
         <div className="marker" />
       </div>
@@ -121,20 +127,22 @@ const CDJ3000: React.FC<Props> = ({ files, name, audioRef, color }) => {
           <button
             key={file.name}
             onClick={() => loadTrack(file)}
-            className="border px-2 py-1 rounded bg-gray-700 hover:bg-gray-600"
+            className="text-xs px-2 py-1 rounded bg-gray-700/50 backdrop-blur hover:bg-gray-600/70 transition"
           >
             {file.name}
           </button>
         ))}
       </div>
-      <div className="mt-2 space-x-2">
-        <button onClick={play} className="play-button flex items-center gap-1">
+      <div className="mt-2 flex justify-center space-x-4">
+        <button
+          onClick={play}
+          className="play-button-modern"
+          style={{ backgroundColor: deckColors[color] }}
+        >
           <FontAwesomeIcon icon={faPlay} />
-          Play
         </button>
-        <button onClick={pause} className="pause-button flex items-center gap-1">
+        <button onClick={pause} className="play-button-modern bg-gray-600">
           <FontAwesomeIcon icon={faPause} />
-          Pause
         </button>
       </div>
     </div>

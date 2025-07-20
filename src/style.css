@@ -44,6 +44,8 @@
     height: 10px;
     width: 100%;
     margin-top: 2rem;
+    background-color: rgba(107,114,128,0.5);
+    backdrop-filter: blur(2px);
   }
 
   .cue-button {
@@ -142,4 +144,30 @@
     top: 50%;
     transform: translate(-50%, -50%);
     transform-origin: 50% 100%;
+}
+@layer components {
+  .glass-panel {
+    background-color: rgba(31, 41, 55, 0.5);
+    backdrop-filter: blur(8px);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  }
+  .play-button-modern {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s;
+  }
+  .play-button-modern:hover {
+    transform: scale(1.05);
+  }
+  .play-button-modern:active {
+    transform: scale(0.95);
+  }
 }
