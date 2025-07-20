@@ -163,10 +163,9 @@ do_install() {
   ensure_rsync
   rsync -a --exclude=".git" "$APP_SOURCE_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
-  npm install
+  npm ci
   # Ensure optional peer dependencies are installed
   npm list immer >/dev/null 2>&1 || npm install immer
-  npm update
   npm run build
 
   NGINX_CONF="/etc/nginx/sites-available/${DOMAIN}"
@@ -215,10 +214,9 @@ do_update() {
   ensure_rsync
   rsync -a --exclude=".git" "$APP_SOURCE_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
-  npm install
+  npm ci
   # Ensure optional peer dependencies are installed
   npm list immer >/dev/null 2>&1 || npm install immer
-  npm update
   npm run build
   systemctl reload nginx
   echo "Update complete for $DOMAIN"
