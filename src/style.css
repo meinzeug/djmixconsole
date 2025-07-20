@@ -11,6 +11,7 @@
     border-radius: 0.25rem;
     position: relative;
     background-color: #374151; /* gray-700 */
+    @apply shadow-inner;
   }
 
   .volume-fader::-webkit-slider-thumb,
@@ -25,6 +26,11 @@
     height: 14px;
   }
 
+  .crossfader::-webkit-slider-thumb {
+    width: 20px;
+    height: 20px;
+  }
+
   .volume-fader,
   .eq-fader,
   .gain-fader {
@@ -37,6 +43,7 @@
   .crossfader {
     height: 10px;
     width: 100%;
+    margin-top: 2rem;
   }
 
   .cue-button {
@@ -44,15 +51,29 @@
     color: white;
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
+    transition: background-color 0.2s;
+  }
+
+  .cue-button:hover {
+    background-color: #fb923c;
+  }
+
+  .play-button {
+    @apply bg-green-600 hover:bg-green-500 text-white rounded-full px-4 py-2 shadow-lg;
+  }
+
+  .pause-button {
+    @apply bg-yellow-500 hover:bg-yellow-400 text-white rounded-full px-4 py-2 shadow-lg;
   }
 
   .jogwheel {
     position: relative;
     user-select: none;
     border-radius: 9999px;
-    background-color: #1f2937; /* gray-800 */
     width: 160px;
     height: 160px;
+    background: radial-gradient(circle at center, #4b5563 0%, #1f2937 70%);
+    transition: transform 0.1s linear;
   }
 
   .jogwheel .marker {
@@ -63,5 +84,15 @@
     left: 50%;
     top: 0;
     transform: translateX(-50%);
+  }
+
+  .knob {
+    @apply rounded-full bg-gray-700 shadow-md relative select-none cursor-pointer;
+  }
+
+  .knob::after {
+    content: '';
+    @apply absolute w-1 h-1/3 bg-gray-200 left-1/2 top-1/2;
+    transform-origin: 50% 100%;
   }
 }

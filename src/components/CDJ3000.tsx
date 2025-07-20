@@ -18,10 +18,13 @@ const CDJ3000: React.FC<Props> = ({ files, name, audioRef }) => {
   const [selected, setSelected] = useState<string>('');
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [trackInfo, setTrackInfo] = useState<{title: string; duration: number; bpm?: number} | null>(null);
 
   const loadTrack = (file: File) => {
     const url = URL.createObjectURL(file);
     setSelected(url);
+    setTrackInfo({ title: file.name, duration: 0 });
   };
 
   const play = () => {
@@ -35,6 +38,7 @@ const CDJ3000: React.FC<Props> = ({ files, name, audioRef }) => {
   const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!dragging || !ref.current) return;
     ref.current.currentTime += e.movementX * 0.01;
+    setRotation(r => r + e.movementX);
   };
 
   useEffect(() => {
@@ -65,19 +69,30 @@ const CDJ3000: React.FC<Props> = ({ files, name, audioRef }) => {
         c.fillRect(i, y1, 1, y2 - y1);
       }
     }
+    if (ref.current) {
+      ref.current.onloadedmetadata = () => {
+        setTrackInfo(info => info && { ...info, duration: ref.current!.duration });
+      };
+    }
   }, [selected]);
 
   return (
-    <div className="border p-2">
+    <div className="border p-2 bg-gray-800 rounded-lg text-white">
       <h2 className="font-semibold mb-2">{name} – CDJ‑3000</h2>
-      <audio ref={ref} src={selected} controls className="w-full" />
-      <canvas ref={canvasRef} width={300} height={60} className="w-full mt-2 bg-gray-900" />
+      {trackInfo && (
+        <div className="text-sm mb-1">
+          {trackInfo.title} – {trackInfo.duration.toFixed(1)}s
+        </div>
+      )}
+      <audio ref={ref} src={selected} controls className="w-full mb-2" />
+      <canvas ref={canvasRef} width={300} height={60} className="w-full mb-2 bg-gray-900" />
       <div
         className="jogwheel mx-auto my-4"
         onMouseDown={() => setDragging(true)}
         onMouseUp={() => setDragging(false)}
         onMouseLeave={() => setDragging(false)}
         onMouseMove={onMouseMove}
+        style={{ transform: `rotate(${rotation}deg)` }}
       >
         <div className="marker" />
       </div>
@@ -86,17 +101,17 @@ const CDJ3000: React.FC<Props> = ({ files, name, audioRef }) => {
           <button
             key={file.name}
             onClick={() => loadTrack(file)}
-            className="border px-2 py-1"
+            className="border px-2 py-1 rounded bg-gray-700 hover:bg-gray-600"
           >
             {file.name}
           </button>
         ))}
       </div>
       <div className="mt-2 space-x-2">
-        <button onClick={play} className="bg-green-500 text-white px-2 py-1">
+        <button onClick={play} className="play-button">
           Play
         </button>
-        <button onClick={pause} className="bg-red-500 text-white px-2 py-1">
+        <button onClick={pause} className="pause-button">
           Pause
         </button>
       </div>

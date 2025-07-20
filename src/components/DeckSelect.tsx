@@ -14,14 +14,14 @@ const options = [
 
 const DeckSelect: React.FC<Props> = ({ value, onChange, label }) => {
   return (
-    <div className="mb-2">
+    <div className="mb-2 text-white">
       <Listbox value={value} onChange={onChange}>
         <Listbox.Label className="block text-sm font-medium mb-1">{label}</Listbox.Label>
         <div className="relative">
-          <Listbox.Button className="w-full border rounded px-2 py-1 text-left">
+          <Listbox.Button className="w-full border rounded px-2 py-1 text-left bg-gray-700">
             {options.find(o => o.id === value)?.label}
           </Listbox.Button>
-          <Listbox.Options className="absolute mt-1 w-full bg-white border rounded shadow-md z-10">
+          <Listbox.Options className="absolute mt-1 w-full bg-gray-800 text-white border rounded shadow-md z-10">
             {options.map(option => (
               <Listbox.Option
                 key={option.id}
