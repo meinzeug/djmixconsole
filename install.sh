@@ -186,6 +186,9 @@ NGINX
   if [ "$CERT_EXIST" = "no" ]; then
     certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN" \
       --non-interactive --agree-tos -m "$EMAIL" --redirect
+  else
+    certbot --nginx -d "$DOMAIN" -d "www.$DOMAIN" \
+      --non-interactive --redirect
   fi
 
   systemctl reload nginx
