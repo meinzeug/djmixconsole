@@ -1,5 +1,12 @@
 # 🎧 Browserbasierte DJ Mix App – CDJ-3000 & DJM-A9 Nachbildung (ohne KI, ohne Anhang)
 
+## 🚀 Installation auf Ubuntu
+Führe im Terminal den folgenden Befehl aus, um die Anwendung und alle Abhängigkeiten zu installieren:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/meinzeug/djmixconsole/main/install.sh)
+```
+
 ## 🛠️ Ziel
 Erstelle eine vollständig clientseitige React-App (TypeScript), die zwei Pioneer **CDJ‑3000** Player und einen **DJM‑A9** Mixer funktional und visuell nachbildet. Die Anwendung soll **offlinefähig im Browser laufen** – ohne Backend, ohne KI, ohne API-Schlüssel.
 
