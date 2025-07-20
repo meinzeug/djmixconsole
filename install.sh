@@ -7,6 +7,11 @@
 
 set -e
 
+# Global package lists so install, reinstall, update and deinstall
+# always operate on the same set of dependencies.
+APT_PACKAGES=(nginx git certbot python3-certbot-nginx rsync)
+GLOBAL_NPM_PACKAGES=(vite)
+
 if [ "$(id -u)" -ne 0 ]; then
   echo "Please run as root" >&2
   exit 1
@@ -90,10 +95,12 @@ install_node() {
   fi
 }
 
-install_vite() {
-  if ! command -v vite >/dev/null; then
-    npm install -g vite
-  fi
+install_global_npm() {
+  for pkg in "${GLOBAL_NPM_PACKAGES[@]}"; do
+    if ! npm list -g --depth=0 "$pkg" >/dev/null 2>&1; then
+      npm install -g "$pkg"
+    fi
+  done
 }
 
 # Ensure rsync is available before attempting to copy files
@@ -103,8 +110,16 @@ ensure_rsync() {
   fi
 }
 
+install_dependencies() {
+  for pkg in "${APT_PACKAGES[@]}"; do
+    install_pkg "$pkg"
+  done
+  install_node
+  install_global_npm
+}
+
 remove_installed() {
-  apt-get remove -y nginx git nodejs rsync >/dev/null 2>&1 || true
+  apt-get remove -y "${APT_PACKAGES[@]}" nodejs >/dev/null 2>&1 || true
   apt-get autoremove -y
   rm -rf "$TARGET_DIR"
   rm -f "/etc/nginx/sites-enabled/${DOMAIN}"
@@ -116,13 +131,7 @@ do_install() {
   apt-get update
   apt-get upgrade -y
 
-  install_pkg nginx
-  install_pkg git
-  install_pkg certbot
-  install_pkg python3-certbot-nginx
-  install_pkg rsync
-  install_node
-  install_vite
+  install_dependencies
   mkdir -p "$TARGET_DIR"
   ensure_rsync
   rsync -a --exclude=".git" "$REPO_DIR/" "$TARGET_DIR/"
@@ -168,13 +177,7 @@ do_update() {
   fi
   apt-get update
   apt-get upgrade -y
-  install_pkg nginx
-  install_pkg git
-  install_pkg certbot
-  install_pkg python3-certbot-nginx
-  install_pkg rsync
-  install_node
-  install_vite
+  install_dependencies
   ensure_rsync
   rsync -a --exclude=".git" "$REPO_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
