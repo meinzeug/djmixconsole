@@ -17,13 +17,19 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="p-4 bg-gray-900 min-h-screen text-white font-mono">
-      <h1 className="text-xl font-bold mb-4">DJ Mix Console</h1>
-      <input type="file" accept="audio/*" multiple onChange={onFileChange} className="mb-4" />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 items-start">
+    <div className="flex flex-col h-screen bg-gray-900 text-white p-2 font-mono">
+      <h1 className="text-center text-xl font-bold mb-2">DJ Mix Console</h1>
+      <input
+        type="file"
+        accept="audio/*"
+        multiple
+        onChange={onFileChange}
+        className="mb-2 self-center text-sm file:rounded-full file:border-0 file:bg-cyan-600 file:px-3 file:py-1 file:text-white hover:file:bg-cyan-500"
+      />
+      <div className="flex flex-col md:flex-row flex-1 gap-4 mt-2 items-start">
         <DeckWrapper initialType="cdj" files={files} name="Left Deck" color="cyan" audioRef={leftRef} />
         <Mixer leftRef={leftRef} rightRef={rightRef} />
-        <DeckWrapper initialType="cdj" files={files} name="Right Deck" color="red" audioRef={rightRef} />
+        <DeckWrapper initialType="cdj" files={files} name="Right Deck" color="rose" audioRef={rightRef} />
       </div>
     </div>
   );

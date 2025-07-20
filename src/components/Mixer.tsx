@@ -31,8 +31,8 @@ const Mixer: React.FC<Props> = ({ leftRef, rightRef }) => {
   }, [rightRef, rightVol, cross])
 
   return (
-    <div className="border p-2 flex flex-col items-center">
-      <h2 className="font-semibold mb-2">Mixer</h2>
+    <div className="glass-panel flex flex-col items-center">
+      <h2 className="font-semibold mb-2 text-lg">Mixer</h2>
       <div className="flex space-x-8">
         {/* Channel 1 */}
         <div className="flex flex-col items-center space-y-2">
@@ -49,10 +49,10 @@ const Mixer: React.FC<Props> = ({ leftRef, rightRef }) => {
             onChange={e => setLeftVol(parseFloat(e.target.value))}
             className="volume-fader"
           />
-          <button className="cue-button">Cue</button>
+          <button className="cue-button bg-cyan-500 shadow-cyan-500/50">Cue</button>
         </div>
 
-        <div className="flex flex-col justify-end w-32">
+        <div className="flex flex-col justify-end w-32 mt-8">
           <input
             type="range"
             min={0}
@@ -79,7 +79,7 @@ const Mixer: React.FC<Props> = ({ leftRef, rightRef }) => {
             onChange={e => setRightVol(parseFloat(e.target.value))}
             className="volume-fader"
           />
-          <button className="cue-button">Cue</button>
+          <button className="cue-button bg-rose-500 shadow-rose-500/50">Cue</button>
         </div>
       </div>
     </div>

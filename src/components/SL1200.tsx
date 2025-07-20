@@ -72,11 +72,11 @@ const SL1200: React.FC<Props> = ({ files, name, audioRef }) => {
         ))}
       </div>
       <div className="mt-4 space-x-2">
-        <button onClick={startStop} className="play-button">
+        <button onClick={startStop} className="play-button-modern bg-gray-600">
           {isRunning ? 'Stop' : 'Start'}
         </button>
-        <button onClick={resetPitch} className="pause-button">RESET</button>
-        <button onClick={toggleRange} className="border px-2 py-1 rounded bg-gray-700 hover:bg-gray-600">
+        <button onClick={resetPitch} className="play-button-modern bg-gray-600">RESET</button>
+        <button onClick={toggleRange} className="play-button-modern bg-gray-600 px-3">
           Range {pitchRange === 0.08 ? '±8%' : '±16%'}
         </button>
       </div>

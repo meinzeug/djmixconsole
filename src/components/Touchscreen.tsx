@@ -64,7 +64,7 @@ const Touchscreen: React.FC<Props> = ({ src, audioRef, color }) => {
       ref={canvasRef}
       width={300}
       height={80}
-      className="w-full bg-gray-800 border border-gray-700 rounded-md"
+      className="w-full bg-gray-800/40 backdrop-blur border border-gray-700 rounded-md"
     />
   );
 };
