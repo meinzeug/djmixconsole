@@ -164,6 +164,8 @@ do_install() {
   rsync -a --exclude=".git" "$APP_SOURCE_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
   npm install
+  # Ensure optional peer dependencies are installed
+  npm list immer >/dev/null 2>&1 || npm install immer
   npm update
   npm run build
 
@@ -214,6 +216,8 @@ do_update() {
   rsync -a --exclude=".git" "$APP_SOURCE_DIR/" "$TARGET_DIR/"
   cd "$TARGET_DIR"
   npm install
+  # Ensure optional peer dependencies are installed
+  npm list immer >/dev/null 2>&1 || npm install immer
   npm update
   npm run build
   systemctl reload nginx
