@@ -9,7 +9,14 @@ set -e
 
 # Global package lists so install, reinstall, update and deinstall
 # always operate on the same set of dependencies.
-APT_PACKAGES=(nginx git certbot python3-certbot-nginx rsync)
+# Core system dependencies required for running the application
+APT_PACKAGES=(
+  nginx
+  git
+  certbot
+  python3-certbot-nginx
+  rsync
+)
 GLOBAL_NPM_PACKAGES=(vite)
 
 if [ "$(id -u)" -ne 0 ]; then
