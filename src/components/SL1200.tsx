@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { getAudioContext } from '../audio';
 
 interface Props {
   files: File[];
@@ -34,8 +33,6 @@ const SL1200: React.FC<Props> = ({ files, name, audioRef }) => {
     if (isRunning) {
       ref.current.pause();
     } else {
-      const ctx = getAudioContext();
-      ctx.resume();
       ref.current.play();
     }
     setIsRunning(!isRunning);

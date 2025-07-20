@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { getAudioContext } from '../audio';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import Touchscreen from './Touchscreen';
@@ -42,8 +41,6 @@ const CDJ3000: React.FC<Props> = ({ files, name, audioRef, color }) => {
   };
 
   const play = () => {
-    const ctx = getAudioContext();
-    ctx.resume();
     ref.current?.play();
   };
 
